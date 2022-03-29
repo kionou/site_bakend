@@ -47,7 +47,9 @@
         </div>
         <!-- Collapsible wrapper -->
 
-    
+        <% success.forEach(function(user){ %>
+            <p><%= user.nom %></p>
+          <% }); %>    
             <div class="dropdown  me-3">
                 <a class="dropdown-toggle d-flex align-items-center hidden-arrow" href="#" id="navbarDropdownMenuAvatar"
                     role="button" data-mdb-toggle="dropdown" aria-expanded="false">

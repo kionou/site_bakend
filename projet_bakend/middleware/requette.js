@@ -52,6 +52,20 @@ const requet = class {
         })
        
     }
+
+
+    static afficherUser =(into) =>{
+        return new Promise((resolve,reject)=>{
+            let sql = `SELECT * FROM users WHERE id = ?`;
+            db.query(sql,[into],(error,result)=>{
+                if (result) {
+                return    resolve(result)
+                } else {
+                  return  reject(error)
+                }
+            })
+        })
+    }
 }
 
 

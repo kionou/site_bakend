@@ -15,6 +15,7 @@ const controlleur = class {
     }
 
     static inscriptionGet =(req=request,res=response) =>{
+        res.render('inscription',{alert:{}})
        
     }
 
@@ -42,7 +43,7 @@ const controlleur = class {
         if (req.session.user) {
             res.redirect('/profil')
         } 
-        return  res.render('connection',{alert:{}})
+        return  res.render('connection',{alert:""})
             
         
     }
@@ -67,24 +68,21 @@ const controlleur = class {
         }else{
             requet.connectUser(req.body).then(success =>{
                 let password = req.body.password;
+                let  hash = success[0].password;
                 let  dataUser = {
-                     email:success[0].email,
-                     hash:success[0].password
+                       id:success[0].id,    
               }
-              console.log('zerteyet(e',success.email);
-               let passwordUser = bcrypt.compareSync(password,dataUser.hash);
+               let passwordUser = bcrypt.compareSync(password,hash);
               if (  passwordUser) {
                   req.session.user= dataUser;
                   console.log('ma session est :',req.session);
                   res.redirect('/profil')
               } else {
-                  console.log('mot de passe incorrect')
                  res.render('connection',{alert:'mot de passe incorrect'}) 
               }
 
 
             }).catch(error =>{
-                console.log('kevin',error,'dtjtss');
                 res.render('connection',{alert:'Email ou le Mot de passe incorrect !'})
             })
 
@@ -97,7 +95,12 @@ const controlleur = class {
 
     static profil = (req=request,res=response) =>{
         if (req.session.user) {
-             res.render('profil',)
+        requet.afficherUser(req.session.user.id).then(success=>{
+            res.render('profil',{success})
+        }).catch(error=>{
+           return error
+        })
+            
         }else{
             return res.redirect('/connection')
         }
@@ -105,7 +108,7 @@ const controlleur = class {
     }
     static logout  = (req=request,res=response) =>{
         req.session.destroy();
-         res.redirect('/')
+         res.redirect('/connection')
     }
 }
 
